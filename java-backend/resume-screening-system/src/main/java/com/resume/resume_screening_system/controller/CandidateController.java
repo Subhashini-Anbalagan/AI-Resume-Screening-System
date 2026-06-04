@@ -744,18 +744,33 @@ public Candidate shortlistCandidate(
     candidate.setStatus("Shortlisted");
     candidate.setShortlisted(true);
 
-    System.out.println("Before Email");
+    try {
 
-    emailService.sendEmail(
-            candidate.getEmail(),
-            candidate.getName(),
-            candidate.getAppliedPosition(),
-            "Shortlisted"
-    );
+        System.out.println("Before Email");
 
-    System.out.println("After Email");
+        emailService.sendEmail(
+                candidate.getEmail(),
+                candidate.getName(),
+                candidate.getAppliedPosition(),
+                "Shortlisted"
+        );
 
-    return candidateRepository.save(candidate);
+        System.out.println("After Email");
+
+    } catch (Exception e) {
+
+        System.out.println("EMAIL ERROR:");
+        e.printStackTrace();
+    }
+
+    System.out.println("Before Save");
+
+    Candidate savedCandidate =
+            candidateRepository.save(candidate);
+
+    System.out.println("After Save");
+
+    return savedCandidate;
 }
     // =========================
     // SELECT CANDIDATE
