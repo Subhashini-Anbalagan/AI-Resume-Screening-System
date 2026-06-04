@@ -1,162 +1,164 @@
-package com.resume.resume_screening_system.security;
+        package com.resume.resume_screening_system.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+        import org.springframework.context.annotation.Bean;
+        import org.springframework.context.annotation.Configuration;
 
-import org.springframework.http.HttpMethod;
+        import org.springframework.http.HttpMethod;
 
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+        import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
-import org.springframework.security.config.http.SessionCreationPolicy;
+        import org.springframework.security.config.http.SessionCreationPolicy;
 
-import org.springframework.security.web.SecurityFilterChain;
+        import org.springframework.security.web.SecurityFilterChain;
 
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+        import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+        import org.springframework.web.cors.CorsConfiguration;
+        import org.springframework.web.cors.CorsConfigurationSource;
+        import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
+        import java.util.List;
 
-@Configuration
-public class SecurityConfig {
+        @Configuration
+        public class SecurityConfig {
 
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+        @Autowired
+        private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    // =========================
-    // SECURITY FILTER CHAIN
-    // =========================
+        // =========================
+        // SECURITY FILTER CHAIN
+        // =========================
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(
+        @Bean
+        public SecurityFilterChain securityFilterChain(
 
-            HttpSecurity http
+                HttpSecurity http
 
-    ) throws Exception {
+        ) throws Exception {
 
-        http
-
-                // =========================
-                // DISABLE CSRF
-                // =========================
-
-                .csrf(csrf -> csrf.disable())
-
-                // =========================
-                // ENABLE CORS
-                // =========================
-
-                .cors(cors -> cors.configurationSource(
-                        corsConfigurationSource()
-                ))
-
-                // =========================
-                // AUTHORIZATION
-                // =========================
-
-                .authorizeHttpRequests(auth -> auth
+                http
 
                         // =========================
-                        // ALLOW OPTIONS
+                        // DISABLE CSRF
                         // =========================
 
-                        .requestMatchers(
-                                HttpMethod.OPTIONS,
-                                "/**"
-                        ).permitAll()
+                        .csrf(csrf -> csrf.disable())
 
                         // =========================
-                        // PUBLIC APIs
+                        // ENABLE CORS
                         // =========================
 
-                        .requestMatchers(
-
-                                "/auth/**",
-
-                                "/candidates/**",
-
-                                "/jobs/**",
-
-                                "/fetch-emails"
-
-                        ).permitAll()
+                        .cors(cors -> cors.configurationSource(
+                                corsConfigurationSource()
+                        ))
 
                         // =========================
-                        // ALL OTHER APIs
+                        // AUTHORIZATION
                         // =========================
 
-                        .anyRequest()
-                        .authenticated()
-                )
+                        .authorizeHttpRequests(auth -> auth
 
-                // =========================
-                // STATELESS SESSION
-                // =========================
+                                // =========================
+                                // ALLOW OPTIONS
+                                // =========================
 
-                .sessionManagement(session ->
+                                .requestMatchers(
+                                        HttpMethod.OPTIONS,
+                                        "/**"
+                                ).permitAll()
 
-                        session.sessionCreationPolicy(
+                                // =========================
+                                // PUBLIC APIs
+                                // =========================
 
-                                SessionCreationPolicy.STATELESS
+                                .requestMatchers(
+                                        
+                                        "/",
+
+                                        "/auth/**",
+
+                                        "/candidates/**",
+
+                                        "/jobs/**",
+
+                                        "/fetch-emails"
+
+                                ).permitAll()
+
+                                // =========================
+                                // ALL OTHER APIs
+                                // =========================
+
+                                .anyRequest()
+                                .authenticated()
                         )
-                )
 
-                // =========================
-                // JWT FILTER
-                // =========================
+                        // =========================
+                        // STATELESS SESSION
+                        // =========================
 
-                .addFilterBefore(
+                        .sessionManagement(session ->
 
-                        jwtAuthenticationFilter,
+                                session.sessionCreationPolicy(
 
-                        UsernamePasswordAuthenticationFilter.class
+                                        SessionCreationPolicy.STATELESS
+                                )
+                        )
+
+                        // =========================
+                        // JWT FILTER
+                        // =========================
+
+                        .addFilterBefore(
+
+                                jwtAuthenticationFilter,
+
+                                UsernamePasswordAuthenticationFilter.class
+                        );
+
+                return http.build();
+        }
+
+        // =========================
+        // CORS CONFIGURATION
+        // =========================
+
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource() {
+
+                CorsConfiguration configuration =
+                        new CorsConfiguration();
+
+                configuration.setAllowedOrigins(
+                        List.of("*")
                 );
 
-        return http.build();
-    }
+                configuration.setAllowedMethods(
+                        List.of(
+                                "GET",
+                                "POST",
+                                "PUT",
+                                "DELETE",
+                                "OPTIONS"
+                        )
+                );
 
-    // =========================
-    // CORS CONFIGURATION
-    // =========================
+                configuration.setAllowedHeaders(
+                        List.of("*")
+                );
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+                configuration.setAllowCredentials(false);
 
-        CorsConfiguration configuration =
-                new CorsConfiguration();
+                UrlBasedCorsConfigurationSource source =
+                        new UrlBasedCorsConfigurationSource();
 
-        configuration.setAllowedOrigins(
-                List.of("*")
-        );
+                source.registerCorsConfiguration(
+                        "/**",
+                        configuration
+                );
 
-        configuration.setAllowedMethods(
-                List.of(
-                        "GET",
-                        "POST",
-                        "PUT",
-                        "DELETE",
-                        "OPTIONS"
-                )
-        );
-
-        configuration.setAllowedHeaders(
-                List.of("*")
-        );
-
-        configuration.setAllowCredentials(false);
-
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
-
-        source.registerCorsConfiguration(
-                "/**",
-                configuration
-        );
-
-        return source;
-    }
-}
+                return source;
+        }
+        }
