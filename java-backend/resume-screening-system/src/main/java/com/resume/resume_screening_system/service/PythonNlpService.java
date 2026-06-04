@@ -65,7 +65,7 @@ public class PythonNlpService {
             // =========================
 
             String pythonApiUrl =
-                    "http://127.0.0.1:8000/analyze";
+                    "https://ai-resume-screening-system-niou.onrender.com/analyze";
 
             // =========================
             // HEADERS
