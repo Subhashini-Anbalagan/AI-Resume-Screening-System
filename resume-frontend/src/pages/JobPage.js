@@ -81,7 +81,7 @@ function JobPage() {
     try {
 
       await axios.post(
-        "http://localhost:8080/jobs",
+        "https://resume-screening-backend-to7n.onrender.com/jobs",
         {
           jobTitle,
           jobDescription,
