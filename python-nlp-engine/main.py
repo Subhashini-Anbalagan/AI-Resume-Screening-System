@@ -702,7 +702,7 @@ async def analyze_resume(
     # =========================
 
     resumeUrl = (
-        f"http://localhost:8000/uploads/{file.filename}"
+        f"https://ai-resume-screening-system-niou.onrender.com/uploads/{file.filename}"
     )
 
     print("=================================")
