@@ -24,7 +24,8 @@ function ResetPasswordPage() {
   const handleReset = async () => {
     try {
       const response = await axios.post(
-        "https://resume-screening-backend-to7n.onrender.com/auth/reset-password",
+        "https://resume-screening-backend-to7n.onrender.com/auth/reset-password"
+        ,
         {
           token,
           newPassword: password,
