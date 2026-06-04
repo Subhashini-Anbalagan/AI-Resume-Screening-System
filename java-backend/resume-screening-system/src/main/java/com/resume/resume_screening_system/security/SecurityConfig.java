@@ -74,10 +74,12 @@
                                 // =========================
 
                                 .requestMatchers(
-                                        
+
                                         "/",
 
-                                        "/auth/**",
+                                        "/auth/login",
+                                        "/auth/forgot-password",
+                                        "/auth/reset-password",
 
                                         "/candidates/**",
 
