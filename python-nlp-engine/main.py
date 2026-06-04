@@ -296,7 +296,6 @@ def skill_match(skill1, skill2):
 
     doc1 = nlp(skill1)
     doc2 = nlp(skill2)
-
     semantic_score = doc1.similarity(doc2)
 
     if semantic_score >= 0.80:
