@@ -12,7 +12,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    @Value("${BREVO_USERNAME}")
+    @Value("${GMAIL_EMAIL}")
     private String fromEmail;
 
     // =========================================
@@ -34,9 +34,7 @@ public class EmailService {
         SimpleMailMessage message =
                 new SimpleMailMessage();
 
-        message.setFrom(
-                "message.setFrom(fromEmail);"
-        );
+        message.setFrom(fromEmail);
 
         message.setTo(toEmail);
 
@@ -135,9 +133,7 @@ public class EmailService {
         SimpleMailMessage hrMessage =
                 new SimpleMailMessage();
 
-        hrMessage.setFrom(
-                "message.setFrom(fromEmail);"
-        );
+        hrMessage.setFrom(fromEmail);
 
         hrMessage.setTo(
                 "anbusubha41359@gmail.com"
@@ -185,9 +181,7 @@ public class EmailService {
         SimpleMailMessage message =
                 new SimpleMailMessage();
 
-        message.setFrom(
-                "message.setFrom(fromEmail);"
-        );
+        message.setFrom(fromEmail);
 
         message.setTo(email);
 
