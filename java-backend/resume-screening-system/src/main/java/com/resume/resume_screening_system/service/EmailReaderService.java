@@ -26,7 +26,7 @@ public class EmailReaderService {
             "resumeiqscreening@gmail.com";
 
     private final String password =
-            "mjpmugrvctphuovc";
+            "arlcsbfhbbjwqeyo";
 
     // =========================
     // READ EMAILS
