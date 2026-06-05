@@ -16,11 +16,8 @@ import com.resume.resume_screening_system.service.CloudinaryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 
 import java.time.LocalDateTime;
 
@@ -645,72 +641,27 @@ System.out.println(
     // DOWNLOAD RESUME
     // =========================
 
-    @GetMapping("/download/{id}")
-    public ResponseEntity<Resource>
-    downloadResume(
 
-            @PathVariable Long id
+@GetMapping("/download/{id}")
+public ResponseEntity<Void> downloadResume(
+        @PathVariable Long id
+) {
 
-    ) throws IOException {
+    Candidate candidate =
+            candidateRepository.findById(id)
+                    .orElseThrow(() ->
+                            new RuntimeException(
+                                    "Candidate not found"
+                            ));
 
-        Candidate candidate =
-                candidateRepository.findById(id)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Candidate not found"
-                                ));
-
-        File file =
-                new File(
-                        candidate.getResumeFilePath()
-                );
-
-        Resource resource =
-                new UrlResource(file.toURI());
-
-        String contentType =
-                "application/octet-stream";
-
-        if (
-                file.getName()
-                        .toLowerCase()
-                        .endsWith(".pdf")
-        ) {
-
-            contentType =
-                    MediaType.APPLICATION_PDF_VALUE;
-
-        } else if (
-                file.getName()
-                        .toLowerCase()
-                        .endsWith(".docx")
-        ) {
-
-            contentType =
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-        }
-
-        return ResponseEntity.ok()
-
-                .header(
-
-                        HttpHeaders
-                                .CONTENT_DISPOSITION,
-
-                        "inline; filename=\""
-                                + file.getName()
-                                + "\""
-                )
-
-                .contentType(
-                        MediaType.parseMediaType(
-                                contentType
-                        )
-                )
-
-                .body(resource);
-    }
-
+    return ResponseEntity
+            .status(302)
+            .header(
+                    HttpHeaders.LOCATION,
+                    candidate.getResumeUrl()
+            )
+            .build();
+}
     // =========================
     // GET RANKING
     // =========================
