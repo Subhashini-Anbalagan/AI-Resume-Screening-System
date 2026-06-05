@@ -92,11 +92,15 @@ public class EmailService {
             );
         }
 
-        try {
+       try {
 
     System.out.println("Sending Mail To: " + toEmail);
 
+    System.out.println("Trying SMTP Connection...");
+
     mailSender.send(message);
+
+    System.out.println("SMTP Success");
 
     System.out.println("Mail Sent Successfully");
 
