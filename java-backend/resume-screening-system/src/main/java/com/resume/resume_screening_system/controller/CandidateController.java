@@ -12,6 +12,7 @@ import com.resume.resume_screening_system.repository.JobRepository;
 import com.resume.resume_screening_system.service.EmailService;
 import com.resume.resume_screening_system.service.PythonNlpService;
 import com.resume.resume_screening_system.service.ResumeParserService;
+import com.resume.resume_screening_system.service.CloudinaryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -54,6 +55,9 @@ public class CandidateController {
 
     @Autowired
     private ResumeParserService resumeParserService;
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     // =========================
     // GET ALL CANDIDATES
@@ -187,9 +191,19 @@ public String test() {
                         + fileName;
 
         File destinationFile =
-                new File(filePath);
+        new File(filePath);
 
-        file.transferTo(destinationFile);
+file.transferTo(destinationFile);
+
+String cloudinaryUrl =
+        cloudinaryService.uploadResume(
+                destinationFile
+        );
+
+System.out.println(
+        "Cloudinary URL: "
+        + cloudinaryUrl
+);
 
         // =========================
         // RESUME PARSING
@@ -495,7 +509,7 @@ public String test() {
         );
 
         candidate.setResumeUrl(
-                pythonResponse.getResumeUrl()
+                cloudinaryUrl
         );
 
         candidate.setAppliedDate(
