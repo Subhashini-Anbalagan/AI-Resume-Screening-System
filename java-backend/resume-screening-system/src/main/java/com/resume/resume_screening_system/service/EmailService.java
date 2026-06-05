@@ -1,6 +1,7 @@
 package com.resume.resume_screening_system.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,9 @@ public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
+
+    @Value("${BREVO_USERNAME}")
+    private String fromEmail;
 
     // =========================================
     // CANDIDATE EMAIL
@@ -31,7 +35,7 @@ public class EmailService {
                 new SimpleMailMessage();
 
         message.setFrom(
-                "resumeiqscreening@gmail.com"
+                "message.setFrom(fromEmail);"
         );
 
         message.setTo(toEmail);
@@ -132,7 +136,7 @@ public class EmailService {
                 new SimpleMailMessage();
 
         hrMessage.setFrom(
-                "resumeiqscreening@gmail.com"
+                "message.setFrom(fromEmail);"
         );
 
         hrMessage.setTo(
@@ -182,7 +186,7 @@ public class EmailService {
                 new SimpleMailMessage();
 
         message.setFrom(
-                "resumeiqscreening@gmail.com"
+                "message.setFrom(fromEmail);"
         );
 
         message.setTo(email);
