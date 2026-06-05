@@ -712,21 +712,25 @@ public Candidate shortlistCandidate(
 
     System.out.println("Candidate Saved");
 
+    new Thread(() -> {
+
     try {
 
-    emailService.sendEmail(
-            candidate.getEmail(),
-            candidate.getName(),
-            candidate.getAppliedPosition(),
-            "Shortlisted"
-    );
+        emailService.sendEmail(
+                candidate.getEmail(),
+                candidate.getName(),
+                candidate.getAppliedPosition(),
+                "Shortlisted"
+        );
 
-    System.out.println("Email Sent");
+        System.out.println("Email Sent");
 
-} catch (Exception e) {
+    } catch (Exception e) {
 
-    e.printStackTrace();
-}
+        e.printStackTrace();
+    }
+
+}).start();
 
     return savedCandidate;
 }
@@ -764,38 +768,42 @@ public Candidate shortlistCandidate(
         // SEND SELECTION MAIL
         // =========================
 
-       try {
+       new Thread(() -> {
 
-    emailService.sendEmail(
+    try {
 
-            candidate.getEmail(),
+        emailService.sendEmail(
 
-            candidate.getName(),
+                candidate.getEmail(),
 
-            candidate.getAppliedPosition(),
+                candidate.getName(),
 
-            "Selected"
-    );
+                candidate.getAppliedPosition(),
 
-    emailService.sendSelectionNotificationToHR(
+                "Selected"
+        );
 
-            candidate.getName(),
+        emailService.sendSelectionNotificationToHR(
 
-            candidate.getEmail(),
+                candidate.getName(),
 
-            candidate.getAppliedPosition(),
+                candidate.getEmail(),
 
-            candidate.getScore()
-    );
+                candidate.getAppliedPosition(),
 
-    System.out.println("Selection Email Sent");
+                candidate.getScore()
+        );
 
-} catch (Exception e) {
+        System.out.println("Selection Email Sent");
 
-    System.out.println("Selection Email Error");
+    } catch (Exception e) {
 
-    e.printStackTrace();
-}
+        System.out.println("Selection Email Error");
+
+        e.printStackTrace();
+    }
+
+}).start();
 
         return candidateRepository.save(
                 candidate
