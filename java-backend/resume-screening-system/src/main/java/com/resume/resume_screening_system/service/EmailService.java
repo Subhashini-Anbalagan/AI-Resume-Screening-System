@@ -12,7 +12,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    @Value("${spring.mail.username}")
+    @Value("${GMAIL_EMAIL}")
     private String fromEmail;
 
     // =========================================
@@ -102,7 +102,10 @@ public class EmailService {
 
     System.out.println("FROM EMAIL = " + fromEmail);
 
-    
+    System.out.println(
+            "APP PASSWORD LOADED = "
+                    + (System.getenv("GMAIL_APP_PASSWORD") != null)
+    );
 
     mailSender.send(message);
 

@@ -22,10 +22,10 @@ public EmailFetchService() {
     );
 }
 
-@Value("${spring.mail.username}")
+@Value("${GMAIL_EMAIL}")
 private String username;
 
-@Value("${spring.mail.password}")
+@Value("${GMAIL_APP_PASSWORD}")
 private String password;
 
 @Autowired
