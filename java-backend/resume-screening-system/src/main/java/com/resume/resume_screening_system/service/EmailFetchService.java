@@ -22,10 +22,10 @@ public EmailFetchService() {
     );
 }
 
-@Value("${GMAIL_EMAIL}")
+@Value("${OUTLOOK_EMAIL}")
 private String username;
 
-@Value("${GMAIL_APP_PASSWORD}")
+@Value("${OUTLOOK_PASSWORD}")
 private String password;
 
 @Autowired
@@ -67,6 +67,11 @@ public void fetchEmails() {
                 "imaps"
         );
 
+        props.put(
+                "mail.store.protocol",
+                "imaps"
+        );
+
         Session session =
                 Session.getInstance(props);
 
@@ -74,7 +79,7 @@ public void fetchEmails() {
                 session.getStore("imaps");
 
         store.connect(
-                "imap.gmail.com",
+                 "outlook.office365.com",
                 username,
                 password
         );
