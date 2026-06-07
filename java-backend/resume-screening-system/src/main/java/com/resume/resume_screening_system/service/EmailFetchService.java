@@ -22,10 +22,10 @@ public EmailFetchService() {
     );
 }
 
-@Value("${OUTLOOK_EMAIL}")
+@Value("${spring.mail.username}")
 private String username;
 
-@Value("${OUTLOOK_PASSWORD}")
+@Value("${spring.mail.password}")
 private String password;
 
 @Autowired
@@ -67,11 +67,6 @@ public void fetchEmails() {
                 "imaps"
         );
 
-        props.put(
-                "mail.store.protocol",
-                "imaps"
-        );
-
         Session session =
                 Session.getInstance(props);
 
@@ -79,7 +74,7 @@ public void fetchEmails() {
                 session.getStore("imaps");
 
         store.connect(
-                 "outlook.office365.com",
+                "imap.gmail.com",
                 username,
                 password
         );

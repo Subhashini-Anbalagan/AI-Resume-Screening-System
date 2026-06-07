@@ -102,10 +102,7 @@ public class EmailService {
 
     System.out.println("FROM EMAIL = " + fromEmail);
 
-    System.out.println(
-            "OUTLOOK PASSWORD LOADED = "
-                    + (System.getenv("OUTLOOK_PASSWORD") != null)
-    );
+    
 
     mailSender.send(message);
 

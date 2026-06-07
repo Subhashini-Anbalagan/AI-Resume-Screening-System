@@ -5,7 +5,6 @@ import jakarta.mail.search.FlagTerm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,11 +22,11 @@ public class EmailReaderService {
     // GMAIL CONFIG
     // =========================
 
-    @Value("${OUTLOOK_EMAIL}")
-    private String username;
+    private final String username =
+            "resumeiqscreening@gmail.com";
 
-    @Value("${OUTLOOK_PASSWORD}")
-    private String password;
+    private final String password =
+            "arlcsbfhbbjwqeyo";
 
     // =========================
     // READ EMAILS
@@ -68,7 +67,7 @@ public class EmailReaderService {
 
             store.connect(
 
-                    "outlook.office365.com",
+                    "imap.gmail.com",
 
                     username,
 
