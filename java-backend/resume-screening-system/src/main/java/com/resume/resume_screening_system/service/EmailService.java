@@ -1,19 +1,87 @@
 package com.resume.resume_screening_system.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import com.sendgrid.*;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
+
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class EmailService {
+        
 
-    @Autowired
-    private JavaMailSender mailSender;
+    @Value("${sendgrid.api.key}")
+    private String sendGridApiKey;
 
-    @Value("${GMAIL_EMAIL}")
+    @Value("${sendgrid.from.email}")
     private String fromEmail;
+    private void sendMailUsingSendGrid(
+        String to,
+        String subject,
+        String body
+) {
+
+    try {
+
+        Email from =
+                new Email(fromEmail);
+
+        Email recipient =
+                new Email(to);
+
+        Content content =
+                new Content(
+                        "text/plain",
+                        body
+                );
+
+        Mail mail =
+                new Mail(
+                        from,
+                        subject,
+                        recipient,
+                        content
+                );
+
+        SendGrid sendGrid =
+                new SendGrid(sendGridApiKey);
+
+        Request request =
+                new Request();
+
+        request.setMethod(Method.POST);
+
+        request.setEndpoint("mail/send");
+
+        request.setBody(mail.build());
+
+        Response response =
+                sendGrid.api(request);
+
+        System.out.println(
+        "SendGrid Status Code : "
+                + response.getStatusCode()
+);
+
+System.out.println(
+        "SendGrid Response : "
+                + response.getBody()
+);
+
+    } catch (Exception e) {
+
+        System.out.println(
+                "SENDGRID ERROR"
+        );
+
+        e.printStackTrace();
+    }
+}
 
     // =========================================
     // CANDIDATE EMAIL
@@ -98,18 +166,22 @@ public class EmailService {
 
     System.out.println("Sending Mail To: " + toEmail);
 
-    System.out.println("Trying SMTP Connection...");
+    System.out.println("Sending Email Through SendGrid...");
 
     System.out.println("FROM EMAIL = " + fromEmail);
 
     System.out.println(
-            "APP PASSWORD LOADED = "
-                    + (System.getenv("GMAIL_APP_PASSWORD") != null)
-    );
+        "SENDGRID API LOADED = "
+                + (sendGridApiKey != null)
+);
 
-    mailSender.send(message);
+    sendMailUsingSendGrid(
+        toEmail,
+        message.getSubject(),
+        message.getText()
+);
 
-    System.out.println("SMTP Success");
+    System.out.println("SendGrid Request Completed");
 
     System.out.println("Mail Sent Successfully");
 
@@ -174,7 +246,11 @@ public class EmailService {
                         + "Salem Infotech"
         );
 
-        mailSender.send(hrMessage);
+        sendMailUsingSendGrid(
+        "resumeiqscreening@gmail.com",
+        hrMessage.getSubject(),
+        hrMessage.getText()
+);
     }
 
     // =========================================
@@ -213,6 +289,10 @@ public class EmailService {
                         + "Selectra Team"
         );
 
-        mailSender.send(message);
+        sendMailUsingSendGrid(
+        email,
+        message.getSubject(),
+        message.getText()
+);
     }
 }
